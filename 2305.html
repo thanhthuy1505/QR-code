@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For you</title>
     <style>
         body {
@@ -12,45 +10,45 @@
             height: 100vh;
             font-family: 'Arial', sans-serif;
         }
-
+        
         #video-container {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 10;
-            width: 90vw;
-            max-height: 60vh;
+            width: 60%;
+            height: 60%;
         }
-
+        
         video {
             width: 100%;
-            height: auto;
-            object-fit: contain;
+            height: 100%;
+            object-fit: cover;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 0, 100, 0.7);
+            box-shadow: 0 0 30px rgba(255, 0, 100, 0.9);
         }
-
+        
         .floating-text {
             position: absolute;
             color: white;
             z-index: 20;
-            text-shadow: 0 0 10px #ff0066;
-            font-size: 3.5vw;
+            text-shadow: 0 0 15px #ff0066;
+            font-size: 14px;
             white-space: nowrap;
             animation: floatText linear forwards;
-            padding: 6px 10px;
+            padding: 10px;
         }
-
+        
         .heart {
             position: absolute;
             pointer-events: none;
             animation: floatHeart linear forwards;
-            font-size: 5vw;
+            font-size: 20px;
             z-index: 100;
             filter: drop-shadow(0 0 10px rgba(255, 51, 102, 0.7));
         }
-
+        
         @keyframes floatHeart {
             0% {
                 transform: translate(var(--startX), var(--startY)) scale(0.5) rotate(0deg);
@@ -65,7 +63,7 @@
                 opacity: 0;
             }
         }
-
+        
         @keyframes floatText {
             0% {
                 transform: translateX(calc(-100% - 100vw)) translateY(var(--text-y));
@@ -85,16 +83,18 @@
     <div id="video-container">
         <video controls autoplay loop muted>
             <source src="your-video.mp4" type="video/mp4">
-            Trình duyệt của bạn không hỗ trợ video.
+            Your browser does not support the video tag.
         </video>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Khai báo mảng texts đầy đủ
             const texts = [
                 { content: "Em iu anhh❤️" },
                 { content: "I love you!" },
                 { content: "Love you so much!💕" },
+                { content: "Em iu anhh❤️" },
                 { content: "Anh là tất cả của em!" }, 
                 { content: "Em sẽ luôn bên cạnh anh!" },
                 { content: "Em sẽ không bao giờ rời xa anh!" },
@@ -102,56 +102,83 @@
                 { content: "Em sẽ luôn yêu anh!" },      
                 { content: "You're my person." }
             ];
-
+            
+            // Tạo text với vị trí ngẫu nhiên
             function createRandomText() {
                 const textObj = texts[Math.floor(Math.random() * texts.length)];
-                const yPos = Math.random() * 80 + 10;
+                const yPos = Math.random() * 80 + 10; // Random từ 10% đến 90% chiều cao
                 createFloatingText(textObj.content, yPos + 'vh');
+                
+                // Tạo text mới sau khoảng thời gian ngẫu nhiên
                 setTimeout(createRandomText, Math.random() * 1000 + 500);
             }
-
+            
+            // Bắt đầu tạo text
             createRandomText();
-
+            
+            // Hàm tạo text bay
             function createFloatingText(content, yPos) {
                 const text = document.createElement('div');
                 text.classList.add('floating-text');
                 text.textContent = content;
                 text.style.setProperty('--text-y', yPos);
-                const duration = Math.random() * 15 + 5;
+                
+                // Random tốc độ
+                const duration = Math.random() * 15 + 5; // 10-25 giây
                 text.style.animationDuration = duration + 's';
+                
                 document.body.appendChild(text);
-                setTimeout(() => text.remove(), duration * 1000);
+                
+                // Tự xóa sau khi animation kết thúc
+                setTimeout(() => {
+                    text.remove();
+                }, duration * 1000);
             }
-
+            
+            // Tạo trái tim bay ngẫu nhiên
             setInterval(createHeart, 50);
-
+            
             function createHeart() {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
+                
+                // Random chọn giữa ❤️ và 💕
                 heart.innerHTML = Math.random() > 0.5 ? '❤️' : '💕';
-
+                
+                // Vị trí bắt đầu ngẫu nhiên
                 const startX = Math.random() * window.innerWidth;
                 const startY = Math.random() * window.innerHeight;
+                
+                // Vị trí kết thúc ngẫu nhiên
                 const endX = Math.random() * window.innerWidth;
                 const endY = Math.random() * window.innerHeight;
+                
+                // Vị trí giữa (để tạo đường cong)
                 const midX = (startX + endX) / 2 + (Math.random() * 200 - 100);
                 const midY = (startY + endY) / 2 + (Math.random() * 200 - 100);
-
+                
+                // Áp dụng vị trí
                 heart.style.setProperty('--startX', startX + 'px');
                 heart.style.setProperty('--startY', startY + 'px');
                 heart.style.setProperty('--midX', midX + 'px');
                 heart.style.setProperty('--midY', midY + 'px');
                 heart.style.setProperty('--endX', endX + 'px');
                 heart.style.setProperty('--endY', endY + 'px');
-
+                
+                // Thời gian animation
                 const duration = Math.random() * 3 + 2;
                 heart.style.animationDuration = duration + 's';
-
+                
+                // Màu sắc ngẫu nhiên
                 const colors = ['#ff3366', '#ff66a3', '#ff0066', '#ff9999', '#ff1493'];
                 heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-
+                
                 document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), duration * 1000);
+                
+                // Tự xóa sau khi hoàn thành
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
             }
         });
     </script>
